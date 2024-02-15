@@ -7,6 +7,53 @@ EXTENSION_DIR="$HOME/.vscode/extensions"
 # Create the extension directory if it doesn't exist
 mkdir -p "$EXTENSION_DIR"
 
+# Install xcode
+xcode-select --install
+
+# install brew 
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+#
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+
+# install node version manager
+brew install nvm
+
+
+nvm install 14.20.0
+
+nvm install 16.14.2
+
+nvm install 18.13.0
+
+nvm install node
+
+# make node 16.14.2 the default
+nvm alias default v16.14.2
+
+# install yarn
+npm i -g yarn
+
+## the following code is to remove the python bloat
+cd /Library
+
+# removing python
+sudo rm -rf Python
+
+cd /Applications
+
+# removing python in applications
+sudo rm -rf Python.app
+
+# remove python frameworks
+sudo rm -rf /Library/Frameworks/Python.framework
+
+# remove python binary
+sudo rm -rf /usr/local/bin/python
+
+#wget https://repo.anaconda.com/archive/Anaconda3-2023.09-0-MacOSX-x86_64.pkg // get arm link
+
+
 
 brew install wget
 
