@@ -21,7 +21,8 @@ brew install nvm
 
 # install git
 brew install git
-
+echo 'export PATH="/usr/local/bin:${PATH}"' >> ~/.zshrc
+echo 'export PATH="/opt/homebrew/bin:${PATH}"' >> ~/.bash_profile
 nvm install 14.20.0
 
 nvm install 16.14.2
