@@ -2,10 +2,21 @@
 links=( "https://zoom.us/client/5.17.5.29101/zoomusInstallerFull.pkg" "https://vscode.download.prss.microsoft.com/dbazure/download/stable/31c37ee8f63491495ac49e43b8544550fbae4533/VSCode-darwin-universal.zip" "https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg" "https://downloads.arduino.cc/arduino-ide/arduino-ide_2.3.1_macOS_64bit.dmg" "https://redirector.gvt1.com/edgedl/android/studio/install/2023.1.1.28/android-studio-2023.1.1.28-mac.dmg" "https://www.jetbrains.com/pycharm/download/download-thanks.html?platform=mac" "https://dl.pstmn.io/download/latest/osx_64" "https://studio3t.com/download-thank-you/?OS=osx" "https://repo.anaconda.com/archive/Anaconda3-2023.09-0-MacOSX-x86_64.pkg" "https://downloads.slack-edge.com/releases/macos/4.36.140/prod/universal/Slack-4.36.140-macOS.dmg")
 arm_links=( "https://zoom.us/client/5.17.5.29101/zoomusInstallerFull.pkg" "https://vscode.download.prss.microsoft.com/dbazure/download/stable/31c37ee8f63491495ac49e43b8544550fbae4533/VSCode-darwin-universal.zip" "https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg" "https://downloads.arduino.cc/arduino-ide/arduino-ide_2.3.1_macOS_arm64.dmg" "https://redirector.gvt1.com/edgedl/android/studio/install/2023.1.1.28/android-studio-2023.1.1.28-mac_arm.dmg" "https://www.jetbrains.com/pycharm/download/download-thanks.html?platform=macM1" "https://dl.pstmn.io/download/latest/osx_arm64" "https://studio3t.com/download-thank-you/?OS=osx_aarch64" "https://repo.anaconda.com/archive/Anaconda3-2023.09-0-MacOSX-arm64.pkg" "https://downloads.slack-edge.com/releases/macos/4.36.140/prod/universal/Slack-4.36.140-macOS.dmg")
 packages=( "zoomusInstallerFull.pkg" "VSCode-darwin-universal.zip" "googlechrome.dmg" "arduino-ide.dmg" "android-studio.dmg" "pycharm.dmg" "postman.zip" "Studio-3T.dmg" "anaconda.pkg" "slack.dmg")
-
+function package_installer() {
+    local i="$1"
+    echo "$i"
+    local link="${links[$i]}"
+    if [[ "$(uname -m)" != "x86_64" ]]; then
+        link="${arm_links[$i]}"
+    fi
+    wget "${link}" -O "${packages[$i]}"
+    sudo installer -pkg "${packages[$i]}" -target ../
+}
 EXTENSION_DIR="$HOME/.vscode/extensions"
 # Create the extension directory if it doesn't exist
 mkdir -p "$EXTENSION_DIR"
+
+
 
 # Install xcode
 xcode-select --install
@@ -71,15 +82,7 @@ function damage_installer() {
     wget "${links[$i]}" -O "${packages[$i]}"
 } 
 
-function package_installer() {
-    local i="$1"
-    local link="${links[$i]}"
-    if [[ "$(uname -m)" != "x86_64" ]]; then
-        link="${arm_links[$i]}"
-    fi
-    wget "${link}" -O "${packages[$i]}"
-    sudo installer -pkg "${packages[$i]}" -target ../
-}
+
 
 for i in "${!links[@]}"; do
     if [[ "${links[i]}" == *".pkg"* ]]; then    package_installer "$i"
@@ -122,5 +125,5 @@ echo "Setup complete!"
 
 rm -rf *.pkg
 rm -rf *.zip
-
+package_installer 8
 echo "Finished Installing"
